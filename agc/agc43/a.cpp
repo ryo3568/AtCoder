@@ -12,5 +12,26 @@ int main() {
     rep(i, 0, H){
         cin >> s[i];
     }
-    cout << s[0][0] << endl;
+    vector<vector<int>> dp(H, vector<int>(W));
+    rep(i, 0, W){
+        if(i){
+            if(s[0][i-1]=='.' && s[0][i]=='#') dp[0][i] = dp[0][i-1] + 1;
+            else dp[0][i] = dp[0][i-1];
+        }
+        else{
+            if(s[0][i] == '.') dp[0][i] = 0;
+            else dp[0][i] = 1;
+        }
+    }
+    rep(i, 1, H){
+        rep(j, 0, W){
+            if(s[i-1][j] == '.' && s[i][j] == '#') dp[i][j] = dp[i-1][j] + 1;
+            else dp[i][j] = dp[i-1][j];
+            if(j){
+                if(s[i][j-1] == '.' && s[i][j] == '#') chmin(dp[i][j], dp[i][j-1] + 1);
+                else chmin(dp[i][j], dp[i][j-1]);
+            }
+        }
+    }
+    cout << dp[H-1][W-1] << endl;
 }
